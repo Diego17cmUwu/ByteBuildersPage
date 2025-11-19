@@ -76,16 +76,21 @@
                   <ul>
                     <li><a href="#">Deep Dropdown 1</a></li>
                     <li><a href="#">Deep Dropdown 2</a></li>
-                    <li><a href="#">Deep Dropdown 3</a></li>
-                    <li><a href="#">Deep Dropdown 4</a></li>
-                    <li><a href="#">Deep Dropdown 5</a></li>
                   </ul>
                 </li>
                 <li><a href="#">Dropdown 2</a></li>
                 <li><a href="#">Dropdown 3</a></li>
               </ul>
             </li>
-            <li><a href="#contact">Contact</a></li>
+   <li><a href="#contact">Contact</a></li>
+              <li class="ms-4">
+                <a href="#carrito" class="btn btn-primary btn-sm rounded-pill py-2 px-3">
+                  <img src="assets/img/carrito_img.png" alt="Carrito de compras" class="me-1" style="width: 20px; height: 20px;"> Carrito
+                </a>
+              </li>
+              </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+          </nav>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -194,37 +199,37 @@
         <div class="row gy-4">
           <div class="col-xl-2 col-lg-3 col-md-4 col-6" data-aos="zoom-in" data-aos-delay="100">
             <div class="client-item">
-              <img src="assets/img/clients/clients-1.webp" class="img-fluid" alt="Client 1">
+              <img src="assets/img/clients/Msi_Logo.png" class="img-fluid" alt="Client 1">
             </div>
           </div><!-- End Client Item -->
 
           <div class="col-xl-2 col-lg-3 col-md-4 col-6" data-aos="zoom-in" data-aos-delay="150">
             <div class="client-item">
-              <img src="assets/img/clients/clients-2.webp" class="img-fluid" alt="Client 2">
+              <img src="assets/img/clients/ASRock_Logo.svg.png" class="img-fluid" alt="Client 2">
             </div>
           </div><!-- End Client Item -->
 
           <div class="col-xl-2 col-lg-3 col-md-4 col-6" data-aos="zoom-in" data-aos-delay="200">
             <div class="client-item">
-              <img src="assets/img/clients/clients-3.webp" class="img-fluid" alt="Client 3">
+              <img src="assets/img/clients/NVIDIA_logo.svg.png" class="img-fluid" alt="Client 3">
             </div>
           </div><!-- End Client Item -->
 
           <div class="col-xl-2 col-lg-3 col-md-4 col-6" data-aos="zoom-in" data-aos-delay="250">
             <div class="client-item">
-              <img src="assets/img/clients/clients-4.webp" class="img-fluid" alt="Client 4">
+              <img src="assets/img/clients/Corsair_2020_logo.svg.png" class="img-fluid" alt="Client 4">
             </div>
           </div><!-- End Client Item -->
 
           <div class="col-xl-2 col-lg-3 col-md-4 col-6" data-aos="zoom-in" data-aos-delay="300">
             <div class="client-item">
-              <img src="assets/img/clients/clients-5.webp" class="img-fluid" alt="Client 5">
+              <img src="assets/img/clients/AMD_logo_pre-2013.svg.png" class="img-fluid" alt="Client 5">
             </div>
           </div><!-- End Client Item -->
 
           <div class="col-xl-2 col-lg-3 col-md-4 col-6" data-aos="zoom-in" data-aos-delay="350">
             <div class="client-item">
-              <img src="assets/img/clients/clients-6.webp" class="img-fluid" alt="Client 6">
+              <img src="assets/img/clients/asus-logo-transparent.png" class="img-fluid" alt="Client 6">
             </div>
           </div><!-- End Client Item -->
 
@@ -907,8 +912,8 @@
           <div class="portfolio-filters-wrapper" data-aos="fade-up" data-aos-delay="100">
             <ul class="portfolio-filters isotope-filters">
               <li data-filter="*" class="filter-active">All Components</li>
-              <li data-filter=".filter-branding">CPU</li>
-              <li data-filter=".filter-web">Graphics</li>
+              <li data-filter=".filter-CPU">CPU</li>
+              <li data-filter=".filter-Graphics">Graphics</li>
               <li data-filter=".filter-print">Memory Ram</li>
               <li data-filter=".filter-motion">Storage</li>
             </ul>
@@ -916,7 +921,7 @@
 
           <div class="row gy-4 portfolio-grid isotope-container" data-aos="fade-up" data-aos-delay="200">
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-web">
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-Graphics">
               <div class="portfolio-card">
                 <div class="image-container">
                   <img src="assets/img/portfolio/RTX4090.webp" class="img-fluid" alt="Brand Identity" loading="lazy">
@@ -931,8 +936,8 @@
                       <p class='lightbox-description'>La tarjeta gráfica más potente del mercado para gaming y creación de contenido profesional.</p>">
                         <i class="bi bi-zoom-in"></i>
                       </a>
-                      <a href="#" class="details-link" title="Buy">
-                        <i class="bi bi-arrow-right"></i>
+                      <a class="details-link" title="Agregar al carrito" onclick="alert('Nvidia Rtx 4090 agregado al carrito');">
+                        <i class="bi bi-cart-plus"></i>
                       </a>
                     </div>
                   </div>
@@ -944,24 +949,30 @@
               </div>
             </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-web">
+            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-CPU">
               <div class="portfolio-card">
                 <div class="image-container">
-                  <img src="assets/img/portfolio/portfolio-7.webp" class="img-fluid" alt="E-commerce Platform" loading="lazy">
+                  <img src="assets/img/portfolio/Ryzen 9 5900x.png" class="img-fluid" alt="AMD Ryzen™ 9 5900X" loading="lazy">
+                  <div class="price-badge">$299.99</div>
                   <div class="overlay">
                     <div class="overlay-content">
-                      <a href="assets/img/portfolio/portfolio-7.webp" class="glightbox zoom-link" title="E-commerce Platform">
+                       <a href="assets/img/portfolio/Ryzen 9 5900x.png" class="glightbox zoom-link" title="AMD Ryzen™ 9 5900X"  
+                      data-description="
+                      <div class='product-lightbox-info'>
+                      <div class='lightbox-price-tag'><h3> $299.99 </h3></div>
+                      <p class='lightbox-specs'>Ryzen 5000 Series</p>
+                      <p class='lightbox-description'>AMD StoreMI Technology , AMD Zen 3 Core Architecture , AMD Ryzen™ Master Utility , AMD Ryzen™ VR-Ready Premium</p>">
                         <i class="bi bi-zoom-in"></i>
                       </a>
-                      <a href="portfolio-details.html" class="details-link" title="View Project Details">
-                        <i class="bi bi-arrow-right"></i>
+                      <a class="details-link" title="Agregar al carrito" onclick="alert('AMD Ryzen™ 9 5900X agregado al carrito');">
+                        <i class="bi bi-cart-plus"></i>
                       </a>
                     </div>
                   </div>
                 </div>
                 <div class="content">
-                  <h3>E-commerce Platform</h3>
-                  <p>Modern online shopping experience</p>
+                  <h3>AMD Ryzen™ 9 5900X</h3>
+                  <p>AMD StoreMI Technology , AMD Zen 3 Core Architecture , AMD Ryzen™ Master Utility , AMD Ryzen™ VR-Ready Premium</p>
                 </div>
               </div>
             </div><!-- End Portfolio Item -->
