@@ -12,7 +12,7 @@
   /**
    * Apply .scrolled class to the body as the page is scrolled down
    */
-  function toggleScrolled() {
+    function toggleScrolled() {
     const selectBody = document.querySelector('body');
     const selectHeader = document.querySelector('#header');
     if (!selectHeader.classList.contains('scroll-up-sticky') && !selectHeader.classList.contains('sticky-top') && !selectHeader.classList.contains('fixed-top')) return;
@@ -218,3 +218,101 @@
   document.addEventListener('scroll', navmenuScrollspy);
 
 })();
+        
+        let cart = [];
+        let userBalance = 10000; 
+    // Carrito de compras emergente
+        const cartButton = document.getElementById('cartButton');
+        const cartPopup = document.getElementById('cartPopup');
+        const cartOverlay = document.getElementById('cartOverlay');
+        const cartItems = document.getElementById('cartItems');
+        const cartBadge = document.getElementById('cartBadge');
+        const cartCount = document.getElementById('cartCount');
+        const itemCount = document.getElementById('itemCount');
+        const totalPrice = document.getElementById('totalPrice');
+        const balanceAfter = document.getElementById('balanceAfter');
+        const buyButton = document.getElementById('buyButton');
+
+        // Abrir/cerrar carrito
+        cartButton.addEventListener('click', () => {
+            cartPopup.classList.toggle('active');
+            cartOverlay.classList.toggle('active');
+        });
+         // Cerrar al hacer clic en el overlay
+        cartOverlay.addEventListener('click', () => {
+            cartPopup.classList.remove('active');
+            cartOverlay.classList.remove('active');
+        });
+
+        // Botón de comprar
+        document.getElementById('buyButton').addEventListener('click', () => {
+            cartPopup.classList.remove('active');
+            cartOverlay.classList.remove('active');
+        });
+        // Modificar la función para recibir la imagen
+    function addToCart(name, price, imageUrl) {
+    cart.push({ 
+        name: name, 
+        price: price, 
+        creator: 'Por Usuario',
+        image: imageUrl  // Agregamos la imagen aquí
+    });
+    updateCart();
+    }
+
+// Actualizar la función updateCart para usar la imagen
+    function updateCart() {
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    const count = cart.length;
+
+    cartBadge.textContent = count;
+    cartCount.textContent = count;
+    itemCount.textContent = count;
+    totalPrice.textContent = total;
+    balanceAfter.textContent = userBalance - total;
+
+    if (count === 0) {
+        cartItems.innerHTML = `
+            <div class="empty-cart">
+                <div class="empty-cart-icon">🛒</div>
+                <p>Tu carrito está vacío</p>
+            </div>
+        `;
+        buyButton.disabled = true;
+    } else {
+        cartItems.innerHTML = cart.map((item, index) => `
+            <div class="cart-item">
+                <div class="item-image">
+                    <img src="${item.image}" alt="${item.name}" 
+                         style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+                </div>
+                <div class="item-details">
+                    <div class="item-name">${item.name}</div>
+                    <div class="item-creator">De ${item.creator}</div>
+                    <div class="item-price">
+                        <span class="robux-icon">R$</span> ${item.price}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        buyButton.disabled = false;
+    }
+}
+        // Comprar
+        buyButton.addEventListener('click', () => {
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            if (total <= userBalance) {
+                alert(`¡Compra realizada! Total: $ ${total}`);
+                cart = [];
+                updateCart();
+                cartPopup.classList.remove('active');
+                cartOverlay.classList.remove('active');
+            } else {
+                alert('Saldo insuficiente');
+            }
+        });
+
+        // Inicializar
+        balanceAfter.textContent = userBalance;
+
+

@@ -26,6 +26,7 @@
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
+  
 
   <!-- =======================================================
   * Template Name: LeadPage
@@ -67,7 +68,7 @@
             <li><a href="#about">About</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#services">Guias</a></li>
-            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#portfolio">Products</a></li>
             <li><a href="#team">Team</a></li>
             <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
               <ul>
@@ -82,19 +83,54 @@
                 <li><a href="#">Dropdown 3</a></li>
               </ul>
             </li>
-   <li><a href="#contact">Contact</a></li>
-              <li class="ms-4">
-                <a href="#carrito" class="btn btn-primary btn-sm rounded-pill py-2 px-3">
-                  <img src="assets/img/carrito_img.png" alt="Carrito de compras" class="me-1" style="width: 20px; height: 20px;"> Carrito
-                </a>
-              </li>
-              </ul>
+            <li><a href="#contact">Contact</a></li>  
+            <li><a onclick="updateCart();" class="cart-button" id="cartButton" ><div class="cart-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-badge" id="cartBadge">0</span>
+        </div></a>
+            </li>
+
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
           </nav>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+
         </nav>
       </div>
+    </div>
+      <!-- Overlay -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+
+    <!-- Ventana emergente del carrito -->
+    <div class="cart-popup" id="cartPopup">
+        <div class="cart-header">
+            <h2>Carrito (<span id="cartCount">0</span>)</h2>
+        </div>
+
+        <div class="cart-items" id="cartItems">
+            
+            </div>
+
+
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total: <span id="itemCount">0</span> objetos</span>
+                <div class="total-amount">
+                    <span class="robux-icon">$</span>
+                    <span id="totalPrice">435</span>
+                </div>
+            </div>
+            <button class="buy-button" id="buyButton">Comprar</button>
+            <div class="balance-info">
+                Tu saldo después de esta transacción será 
+                <span class="robux-icon">$</span>
+                <span id="balanceAfter">0</span>
+            </div>
+        </div>
     </div>
 
   </header>
@@ -901,7 +937,7 @@
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <span class="subtitle">Section Title</span>
-        <h2>Components</h2>
+        <h2>Products</h2>
         <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam</p>
       </div><!-- End Section Title -->
 
@@ -911,7 +947,7 @@
 
           <div class="portfolio-filters-wrapper" data-aos="fade-up" data-aos-delay="100">
             <ul class="portfolio-filters isotope-filters">
-              <li data-filter="*" class="filter-active">All Components</li>
+              <li data-filter="*" class="filter-active">All Products</li>
               <li data-filter=".filter-CPU">CPU</li>
               <li data-filter=".filter-Graphics">Graphics</li>
               <li data-filter=".filter-print">Memory Ram</li>
@@ -936,7 +972,7 @@
                       <p class='lightbox-description'>La tarjeta gráfica más potente del mercado para gaming y creación de contenido profesional.</p>">
                         <i class="bi bi-zoom-in"></i>
                       </a>
-                      <a class="details-link" title="Agregar al carrito" onclick="alert('Nvidia Rtx 4090 agregado al carrito');">
+                      <a class="details-link" title="Agregar al carrito" onclick="addToCart('Nvidia Rtx 4090', 1599, 'assets/img/portfolio/RTX4090.webp');">
                         <i class="bi bi-cart-plus"></i>
                       </a>
                     </div>
@@ -964,7 +1000,7 @@
                       <p class='lightbox-description'>AMD StoreMI Technology , AMD Zen 3 Core Architecture , AMD Ryzen™ Master Utility , AMD Ryzen™ VR-Ready Premium</p>">
                         <i class="bi bi-zoom-in"></i>
                       </a>
-                      <a class="details-link" title="Agregar al carrito" onclick="alert('AMD Ryzen™ 9 5900X agregado al carrito');">
+                      <a class="details-link" title="Agregar al carrito" onclick="addToCart('AMD Ryzen™ 9 5900X', 299, 'assets/img/portfolio/Ryzen 9 5900x.png');">
                         <i class="bi bi-cart-plus"></i>
                       </a>
                     </div>
