@@ -1,39 +1,39 @@
 <?php
-  /**
-  * Requires the "PHP Email Form" library
-  * The "PHP Email Form" library is available only in the pro version of the template
-  * The library should be uploaded to: vendor/php-email-form/php-email-form.php
-  * For more info and help: https://bootstrapmade.com/php-email-form/
-  */
+  include 'db_connection.php';
 
-  // Replace contact@example.com with your real receiving email address
-  $receiving_email_address = 'contact@example.com';
+  $email = $_POST['email'] ?? '';
 
-  if( file_exists($php_email_form = '../assets/vendor/php-email-form/php-email-form.php' )) {
-    include( $php_email_form );
+  if ($email) {
+      try {
+          // Check if email already exists
+          $stmt = $db->prepare("SELECT COUNT(*) FROM subscribers WHERE email = :email");
+          $stmt->bindParam(':email', $email);
+          $stmt->execute();
+          if ($stmt->fetchColumn() > 0) {
+               // Already subscribed, we can still return OK or a specific message.
+               // For the generic handler 'OK' is best to show success.
+               echo 'OK';
+               exit;
+          }
+
+          $stmt = $db->prepare("INSERT INTO subscribers (email) VALUES (:email)");
+          $stmt->bindParam(':email', $email);
+
+          if ($stmt->execute()) {
+              echo 'OK';
+          } else {
+              echo 'Error adding subscriber.';
+          }
+      } catch (PDOException $e) {
+           // Duplicate entry might trigger exception if race condition, but we handled check above.
+           // Also 'unique' constraint might trigger it.
+           if ($e->getCode() == 23000) { // Integrity constraint violation
+               echo 'OK'; // Treat duplicate as success
+           } else {
+               echo 'Database Error: ' . $e->getMessage();
+           }
+      }
   } else {
-    die( 'Unable to load the "PHP Email Form" Library!');
+      echo 'Email address required.';
   }
-
-  $contact = new PHP_Email_Form;
-  $contact->ajax = true;
-  
-  $contact->to = $receiving_email_address;
-  $contact->from_name = $_POST['email'];
-  $contact->from_email = $_POST['email'];
-  $contact->subject ="New Subscription: " . $_POST['email'];
-
-  // Uncomment below code if you want to use SMTP to send emails. You need to enter your correct SMTP credentials
-  /*
-  $contact->smtp = array(
-    'host' => 'example.com',
-    'username' => 'example',
-    'password' => 'pass',
-    'port' => '587'
-  );
-  */
-
-  $contact->add_message( $_POST['email'], 'Email');
-
-  echo $contact->send();
 ?>
