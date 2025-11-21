@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -83,7 +87,21 @@
                 <li><a href="#">Dropdown 3</a></li>
               </ul>
             </li>
-            <li><a href="#contact">Contact</a></li>  
+            <li><a href="#contact">Contact</a></li>
+
+              <?php if(isset($_SESSION['user_id'])): ?>
+                  <li class="dropdown"><a href="#"><span>Hola, <?php echo explode(' ', $_SESSION['user_name'])[0]; ?></span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                      <ul>
+                          <?php if($_SESSION['user_role'] == 'admin'): ?>
+                              <li><a href="admin_panel.php" style="color: #ff5733;">Panel Admin</a></li>
+                          <?php endif; ?>
+                          <li><a href="#">Mi Perfil</a></li>
+                          <li><a href="logout.php">Cerrar Sesión</a></li>
+                      </ul>
+                  </li>
+              <?php else: ?>
+                  <li><a href="login.php" class="btn-getstarted" style="margin-left: 15px;">Login</a></li>
+              <?php endif; ?> 
             <li><a onclick="updateCart();" class="cart-button" id="cartButton" ><div class="cart-icon">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="9" cy="21" r="1"></circle>
@@ -930,224 +948,78 @@
       </div>
 
     </section><!-- /Services Section -->
-
+   
     <!-- Portfolio Section -->
     <section id="portfolio" class="portfolio section">
-
+     
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <span class="subtitle">Section Title</span>
         <h2>Products</h2>
         <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam</p>
       </div><!-- End Section Title -->
-
+     
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
         <div class="isotope-layout" data-default-filter="*" data-layout="fitRows" data-sort="original-order">
 
-          <div class="portfolio-filters-wrapper" data-aos="fade-up" data-aos-delay="100">
-            <ul class="portfolio-filters isotope-filters">
-              <li data-filter="*" class="filter-active">All Products</li>
-              <li data-filter=".filter-CPU">CPU</li>
-              <li data-filter=".filter-Graphics">Graphics</li>
-              <li data-filter=".filter-print">Memory Ram</li>
-              <li data-filter=".filter-motion">Storage</li>
-            </ul>
-          </div>
-
           <div class="row gy-4 portfolio-grid isotope-container" data-aos="fade-up" data-aos-delay="200">
+            
+             
+              <?php
+              require 'forms/db_connect.php'; // Ajusta la ruta si db_connect está en otra carpeta
+              $sql = "SELECT * FROM productos";
+              $result = $conn->query($sql);
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-Graphics">
-              <div class="portfolio-card">
-                <div class="image-container">
-                  <img src="assets/img/portfolio/RTX4090.webp" class="img-fluid" alt="Brand Identity" loading="lazy">
-                  <div class="price-badge">$1,599.99</div>
-                  <div class="overlay">
-                    <div class="overlay-content">
-                      <a href="assets/img/portfolio/RTX4090.webp" class="glightbox zoom-link" title="NVIDIA® RTX 4090"  
-                      data-description="
-                      <div class='product-lightbox-info'>
-                      <div class='lightbox-price-tag'><h3> $1,599.99 </h3></div>
-                      <p class='lightbox-specs'>24GB GDDR6X • Ray Tracing • DLSS 3.0</p>
-                      <p class='lightbox-description'>La tarjeta gráfica más potente del mercado para gaming y creación de contenido profesional.</p>">
-                        <i class="bi bi-zoom-in"></i>
-                      </a>
-                      <a class="details-link" title="Agregar al carrito" onclick="addToCart('Nvidia Rtx 4090', 1599, 'assets/img/portfolio/RTX4090.webp');">
-                        <i class="bi bi-cart-plus"></i>
-                      </a>
+              if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                  // Definir el filtro de categoría para Isotope
+                  $filtro_clase = "filter-" . $row["categoria"]; 
+                  ?>
+                  
+                  <div class="col-lg-4 col-md-6 portfolio-item isotope-item <?php echo $filtro_clase; ?>">
+                    <div class="portfolio-card">
+                      <div class="image-container">
+                        <img src="<?php echo $row['imagen']; ?>" class="img-fluid" alt="<?php echo $row['nombre']; ?>" loading="lazy">
+                        <?php if($row['precio'] > 0): ?>
+                          <div class="price-badge">$<?php echo number_format($row['precio'], 2); ?></div>
+                        <?php endif; ?>
+                        
+                        <div class="overlay">
+                          <div class="overlay-content">
+                            <a href="<?php echo $row['imagen']; ?>" class="glightbox zoom-link" 
+                              title="<?php echo $row['nombre']; ?>"
+                              data-description="
+                              <div class='product-lightbox-info'>
+                                  <div class='lightbox-price-tag'><h3> $<?php echo number_format($row['precio'], 2); ?> </h3></div>
+                                  <p class='lightbox-specs'><?php echo $row['specs']; ?></p>
+                                  <p class='lightbox-description'><?php echo $row['descripcion']; ?></p>
+                              </div>">
+                              <i class="bi bi-zoom-in"></i>
+                            </a>
+                            
+                            <a class="details-link" title="Agregar al carrito" 
+                              onclick="addToCart('<?php echo $row['nombre']; ?>', <?php echo $row['precio']; ?>, '<?php echo $row['imagen']; ?>');">
+                              <i class="bi bi-cart-plus"></i>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="content">
+                        <h3><?php echo $row['nombre']; ?></h3>
+                        <p><?php echo substr($row['descripcion'], 0, 100) . '...'; ?></p>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="content">
-                  <h3>Nvidia Rtx 4090</h3>
-                  <p>NVIDIA® GeForce RTX® 4090 es la GPU GeForce definitiva. Brinda un gran salto en rendimiento, eficiencia y gráficos impulsados ​​​​por IA.</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-CPU">
-              <div class="portfolio-card">
-                <div class="image-container">
-                  <img src="assets/img/portfolio/Ryzen 9 5900x.png" class="img-fluid" alt="AMD Ryzen™ 9 5900X" loading="lazy">
-                  <div class="price-badge">$299.99</div>
-                  <div class="overlay">
-                    <div class="overlay-content">
-                       <a href="assets/img/portfolio/Ryzen 9 5900x.png" class="glightbox zoom-link" title="AMD Ryzen™ 9 5900X"  
-                      data-description="
-                      <div class='product-lightbox-info'>
-                      <div class='lightbox-price-tag'><h3> $299.99 </h3></div>
-                      <p class='lightbox-specs'>Ryzen 5000 Series</p>
-                      <p class='lightbox-description'>AMD StoreMI Technology , AMD Zen 3 Core Architecture , AMD Ryzen™ Master Utility , AMD Ryzen™ VR-Ready Premium</p>">
-                        <i class="bi bi-zoom-in"></i>
-                      </a>
-                      <a class="details-link" title="Agregar al carrito" onclick="addToCart('AMD Ryzen™ 9 5900X', 299, 'assets/img/portfolio/Ryzen 9 5900x.png');">
-                        <i class="bi bi-cart-plus"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="content">
-                  <h3>AMD Ryzen™ 9 5900X</h3>
-                  <p>AMD StoreMI Technology , AMD Zen 3 Core Architecture , AMD Ryzen™ Master Utility , AMD Ryzen™ VR-Ready Premium</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
+    <?php
+  }
+} else {
+  echo "<p>No hay productos disponibles.</p>";
+}
+?>
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-print">
-              <div class="portfolio-card">
-                <div class="image-container">
-                  <img src="assets/img/portfolio/portfolio-portrait-5.webp" class="img-fluid" alt="Magazine Design" loading="lazy">
-                  <div class="overlay">
-                    <div class="overlay-content">
-                      <a href="assets/img/portfolio/portfolio-portrait-5.webp" class="glightbox zoom-link" title="Magazine Design">
-                        <i class="bi bi-zoom-in"></i>
-                      </a>
-                      <a href="portfolio-details.html" class="details-link" title="View Project Details">
-                        <i class="bi bi-arrow-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="content">
-                  <h3>Magazine Design</h3>
-                  <p>Editorial layout and typography</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-motion">
-              <div class="portfolio-card">
-                <div class="image-container">
-                  <img src="assets/img/portfolio/portfolio-8.webp" class="img-fluid" alt="Motion Graphics" loading="lazy">
-                  <div class="overlay">
-                    <div class="overlay-content">
-                      <a href="assets/img/portfolio/portfolio-8.webp" class="glightbox zoom-link" title="Motion Graphics">
-                        <i class="bi bi-zoom-in"></i>
-                      </a>
-                      <a href="portfolio-details.html" class="details-link" title="View Project Details">
-                        <i class="bi bi-arrow-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="content">
-                  <h3>Motion Graphics</h3>
-                  <p>Animated visual storytelling</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
-              <div class="portfolio-card">
-                <div class="image-container">
-                  <img src="assets/img/portfolio/portfolio-9.webp" class="img-fluid" alt="Logo Collection" loading="lazy">
-                  <div class="overlay">
-                    <div class="overlay-content">
-                      <a href="assets/img/portfolio/portfolio-9.webp" class="glightbox zoom-link" title="Logo Collection">
-                        <i class="bi bi-zoom-in"></i>
-                      </a>
-                      <a href="portfolio-details.html" class="details-link" title="View Project Details">
-                        <i class="bi bi-arrow-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="content">
-                  <h3>Logo Collection</h3>
-                  <p>Diverse brand mark explorations</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-web">
-              <div class="portfolio-card">
-                <div class="image-container">
-                  <img src="assets/img/portfolio/portfolio-portrait-8.webp" class="img-fluid" alt="Mobile App Design" loading="lazy">
-                  <div class="overlay">
-                    <div class="overlay-content">
-                      <a href="assets/img/portfolio/portfolio-portrait-8.webp" class="glightbox zoom-link" title="Mobile App Design">
-                        <i class="bi bi-zoom-in"></i>
-                      </a>
-                      <a href="portfolio-details.html" class="details-link" title="View Project Details">
-                        <i class="bi bi-arrow-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="content">
-                  <h3>Mobile App Design</h3>
-                  <p>User-centered interface design</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-print">
-              <div class="portfolio-card">
-                <div class="image-container">
-                  <img src="assets/img/portfolio/portfolio-10.webp" class="img-fluid" alt="Packaging Design" loading="lazy">
-                  <div class="overlay">
-                    <div class="overlay-content">
-                      <a href="assets/img/portfolio/portfolio-10.webp" class="glightbox zoom-link" title="Packaging Design">
-                        <i class="bi bi-zoom-in"></i>
-                      </a>
-                      <a href="portfolio-details.html" class="details-link" title="View Project Details">
-                        <i class="bi bi-arrow-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="content">
-                  <h3>Packaging Design</h3>
-                  <p>Sustainable product packaging solutions</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-motion">
-              <div class="portfolio-card">
-                <div class="image-container">
-                  <img src="assets/img/portfolio/portfolio-11.webp" class="img-fluid" alt="Brand Animation" loading="lazy">
-                  <div class="overlay">
-                    <div class="overlay-content">
-                      <a href="assets/img/portfolio/portfolio-11.webp" class="glightbox zoom-link" title="Brand Animation">
-                        <i class="bi bi-zoom-in"></i>
-                      </a>
-                      <a href="portfolio-details.html" class="details-link" title="View Project Details">
-                        <i class="bi bi-arrow-right"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="content">
-                  <h3>Brand Animation</h3>
-                  <p>Dynamic brand identity systems</p>
-                </div>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-          </div><!-- End Portfolio Grid -->
-
-        </div>
+</div>
 
       </div>
 
